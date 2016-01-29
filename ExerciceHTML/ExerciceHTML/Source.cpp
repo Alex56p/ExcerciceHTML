@@ -7,17 +7,58 @@
 #include <algorithm>
 using namespace std;
 
-void AddSpanToKeywords(string& content, string keyword)
+string AddSpanToKeywords(map<int, string> content)
 {
-	auto word = content.find(keyword);
-	string oldContent = content;
-	if (word != std::string::npos)
+	vector<string> keywords = vector<string>{	"alignas", "alignof", "and", "and_eq", "asm", "auto",
+		"bitand", "bitor", "bool", "break", "case", "catch",
+		"char", "char16_t", "char32_t", "class", "compl",
+		"concept", "const", "constexpr", "const_cast",
+		"continue", "decltype", "default", "delete", "do",
+		"double", "dynamic_cast", "else", "enum", "explicit",
+		"export", "extern", "false", "float", "for", "friend",
+		"goto", "if", "inline", "int", "long", "mutable",
+		"namespace", "new", "noexcept", "not", "not_eq",
+		"nullptr", "operator", "or", "or_eq", "private",
+		"protected", "public", "register", "reinterpret_cast",
+		"requires", "return", "short", "signed", "sizeof",
+		"static", "static_assert", "static_cast", "struct",
+		"switch", "template", "this", "thread_local", "throw",
+		"true", "try", "typedef", "typeid", "typename", "union",
+		"unsigned", "using", "virtual", "void", "volatile",
+		"wchar_t", "while", "xor", "xor_eq"};
+	
+	string retour = "";
+	for (int i = 0; i < content.size(); ++i)
 	{
-		content = oldContent.substr(0, word);
-		content += "<span style='color:blue'>" + keyword + "</span>";
-		content += oldContent.substr(word + keyword.length(), oldContent.length());
+		bool trouve = false;
+		for (int j = 0; j < keywords.size(); j++)
+		{
+			if (keywords.at(j) == content[i] && !trouve)
+			{
+				trouve = true;
+				retour += "<span style='color:blue'>" + content[i] + "</span>";
+			}
+
+		}
+		if (!trouve)
+		{
+			retour += content[i];
+		}
 	}
+	return retour;
 }
+
+//void AddSpanToKeywords(string& content, string keyword)
+//{
+//	auto word = content.find(keyword);
+//	string oldContent = content;
+//	if (word != std::string::npos)
+//	{
+//		content = oldContent.substr(0, word);
+//		content += "<span style='color:blue'>" + keyword + "</span>";
+//		content += oldContent.substr(word + keyword.length(), oldContent.length());
+//	}
+//}
 
 void AddWhiteSpaces(string& content)
 {
@@ -90,23 +131,27 @@ int main()
 	string content;
 	string pattern("[a-zA-Z_]([a-zA-Z0-9_])*");
 	regex expression(pattern);
+
+	map<int, string> mots;
+
+	int i = 0;
 	infile.open("Source.cpp");
-	while (!infile.eof())
+	for (string s; infile >> s;)
+	{
+		mots[i] = s;
+		++i;
+	}
+
+	/*while (!infile.eof())
 	{
 		char c = infile.get();
 		content += c;
-	}
-
-	//stringstream sstr(content);
+	}*/
 
 	RemplacerTout(content);
-	AddSpanToKeywords(content, "if");
+	content = AddSpanToKeywords(mots);
 	AddWhiteSpaces(content);
 
-	/*for (string s; sstr >> s;)
-	{
-
-	}*/
 
 	outfile.open("myCode.html");
 	outfile << content;
