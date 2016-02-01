@@ -34,16 +34,12 @@ string AddSpanToKeywords(vector<string>& words)
 		bool trouve = false;
 		for (int j = 0; j < keywords.size(); j++)
 		{
+			//METTRE UN FIND ICI
 			if (keywords.at(j) == words[i] && !trouve)
 			{
 				trouve = true;
-				retour += "<span style='color:blue'>" + words[i] + "</span>";
+				words[i] = "<span style='color:blue'>" + words[i] + "</span>";
 			}
-
-		}
-		if (!trouve)
-		{
-			retour += words[i];
 		}
 	}
 	return retour;
@@ -67,28 +63,28 @@ void RemplacerTout(string &content)
 	{
 		if (content[i] == '<')
 		{
-			content.replace(i, 1, "&lt");
-			i += 2;
+			content.replace(i, 1, " &lt ");
+			i += 4;
 		}
 		else if (content[i] == '>')
 		{
-			content.replace(i, 1, "&gt");
-			i += 2;
+			content.replace(i, 1, " &gt ");
+			i += 4;
 		}
 		else if (content[i] == '&')
 		{
-			content.replace(i, 1, "&amp");
-			i += 2;
+			content.replace(i, 1, " &amp ");
+			i += 4;
 		}
 		else if (content[i] == '\n')
 		{
-			content.replace(i, 1, "</br>");
-			i += 4;
+			content.replace(i, 1, " </br> ");
+			i += 6;
 		}
 		else if (content[i] == '\t')
 		{
-			content.replace(i, 1, "&nbsp&nbsp&nbsp&nbsp");
-			i += 19;
+			content.replace(i, 1, " &nbsp&nbsp&nbsp&nbsp ");
+			i += 21;
 		}
 	}
 	
@@ -118,7 +114,13 @@ int main()
 		back_inserter(words));
 
 	AddSpanToKeywords(words);
-	//AddWhiteSpaces(content);
+
+	content = "";
+
+	for (int i = 0; i < words.size(); i++)
+	{
+		content += words[i] + " ";
+	}
 
 	ofstream outfile("myCode.html");
 	if (outfile)
