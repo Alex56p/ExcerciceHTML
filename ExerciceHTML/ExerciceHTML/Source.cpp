@@ -8,7 +8,7 @@
 #include <sstream>
 using namespace std;
 
-string AddSpanToKeywords(vector<string>& words)
+void AddSpanToKeywords(vector<string>& words)
 {
 	vector<string> keywords = vector<string>{	"alignas", "alignof", "and", "and_eq", "asm", "auto",
 		"bitand", "bitor", "bool", "break", "case", "catch",
@@ -28,7 +28,6 @@ string AddSpanToKeywords(vector<string>& words)
 		"unsigned", "using", "virtual", "void", "volatile",
 		"wchar_t", "while", "xor", "xor_eq"};
 	
-	string retour = "";
 	for (int i = 0; i < words.size(); ++i)
 	{
 		bool trouve = false;
@@ -42,7 +41,6 @@ string AddSpanToKeywords(vector<string>& words)
 			}
 		}
 	}
-	return retour;
 }
 
 //void AddSpanToKeywords(string& content, string keyword)
@@ -91,17 +89,17 @@ void RemplacerTout(string &content)
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
 	string content;
 	//string pattern("[a-zA-Z_]([a-zA-Z0-9_])*");
 	//regex expression(pattern);
-
+	map<string, int> mots;
 	ifstream infile("Source.cpp");
-	while (!infile.eof())
+	for (string s; infile >> s;)
 	{
-		char c = infile.get();
-		content += c;
+		mots[s]++;
+		content += s;
 	}
 
 	RemplacerTout(content);
@@ -122,10 +120,20 @@ int main()
 		content += words[i] + " ";
 	}
 
-	ofstream outfile("myCode.html");
+	ofstream outfile("Source.cpp.html");
 	if (outfile)
 	{
 		outfile << content;
+
+	}
+
+	ofstream stats("Stats.txt");
+	if (stats)
+	{
+		for (auto s = mots.begin(); s != mots.end(); s++)
+		{
+			stats << s->first << " : " << s->second << endl;
+		}
 
 	}
 }
