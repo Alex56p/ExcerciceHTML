@@ -33,27 +33,15 @@ void AddSpanToKeywords(vector<string>& words)
 		bool trouve = false;
 		for (int j = 0; j < keywords.size(); j++)
 		{
-			//METTRE UN FIND ICI
-			if (keywords.at(j) == words[i] && !trouve)
+			int pos = words[i].find(keywords.at(j));
+			if (pos != -1 && !trouve)
 			{
 				trouve = true;
-				words[i] = "<span style='color:blue'>" + words[i] + "</span>";
+				words[i].replace(pos, keywords[j].length(), "<span style='color:blue'>" + words[i].substr(pos,keywords[j].length()) + "</span>");
 			}
 		}
 	}
 }
-
-//void AddSpanToKeywords(string& content, string keyword)
-//{
-//	auto word = content.find(keyword);
-//	string oldContent = content;
-//	if (word != std::string::npos)
-//	{
-//		content = oldContent.substr(0, word);
-//		content += "<span style='color:blue'>" + keyword + "</span>";
-//		content += oldContent.substr(word + keyword.length(), oldContent.length());
-//	}
-//}
 
 void RemplacerTout(string &content)
 {
@@ -92,15 +80,12 @@ void RemplacerTout(string &content)
 int main(int argc, char* argv[])
 {
 	string content;
-	//string pattern("[a-zA-Z_]([a-zA-Z0-9_])*");
-	//regex expression(pattern);
+	string pattern("^[a-zA-Z]([a-zA-Z0-9_])*[\\D]");
+	regex expression(pattern);
 	map<string, int> mots;
 	ifstream infile("Source.cpp");
-	for (string s; infile >> s;)
-	{
-		mots[s]++;
-		content += s;
-	}
+	while (!infile.eof())
+		content += infile.get();
 
 	RemplacerTout(content);
 
@@ -113,27 +98,22 @@ int main(int argc, char* argv[])
 
 	AddSpanToKeywords(words);
 
-	content = "";
-
-	for (int i = 0; i < words.size(); i++)
-	{
-		content += words[i] + " ";
-	}
-
 	ofstream outfile("Source.cpp.html");
-	if (outfile)
+	for (auto itt = begin(words); itt != end(words); ++itt)
+		outfile << *itt << ' ';
+	outfile.close();
+
+	infile.close();
+	infile.open("Source.cpp.html");
+	for (string s; infile >> s;)
 	{
-		outfile << content;
-
+		if (regex_match(s, expression))
+			mots[s]++;
 	}
-
+	infile.close();
 	ofstream stats("Stats.txt");
-	if (stats)
-	{
-		for (auto s = mots.begin(); s != mots.end(); s++)
-		{
-			stats << s->first << " : " << s->second << endl;
-		}
-
-	}
+	for (auto s = mots.begin(); s != mots.end(); s++)
+		stats << s->first << " : " << s->second << endl;
+	stats.close();
+	
 }
