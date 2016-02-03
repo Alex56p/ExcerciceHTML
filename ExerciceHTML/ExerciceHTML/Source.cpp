@@ -45,35 +45,19 @@ void AddSpanToKeywords(vector<string>& words)
 
 void RemplacerTout(string &content)
 {
-	for (int i = 0; i != content.size(); ++i)
+	map<char, string> symbols;
+	symbols['<'] = " &lt ";
+	symbols['>'] = " &gt ";
+	symbols['&'] = " &amp ";
+	symbols['\n'] = " </br> ";
+	symbols['\t'] = " &nbsp&nbsp&nbsp&nbsp ";
+	for (auto i = begin(content); i != end(content); ++i)
 	{
-		if (content[i] == '<')
+		if (symbols.find(*i) != end(symbols))
 		{
-			content.replace(i, 1, " &lt ");
-			i += 4;
-		}
-		else if (content[i] == '>')
-		{
-			content.replace(i, 1, " &gt ");
-			i += 4;
-		}
-		else if (content[i] == '&')
-		{
-			content.replace(i, 1, " &amp ");
-			i += 4;
-		}
-		else if (content[i] == '\n')
-		{
-			content.replace(i, 1, " </br> ");
-			i += 6;
-		}
-		else if (content[i] == '\t')
-		{
-			content.replace(i, 1, " &nbsp&nbsp&nbsp&nbsp ");
-			i += 21;
+			content = content.substr(i, 0);
 		}
 	}
-	
 }
 
 
