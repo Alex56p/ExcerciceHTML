@@ -6,10 +6,29 @@
 #include <regex>
 #include <algorithm>
 #include <sstream>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 
-void AddSpanToKeywords(vector<string>& words)
+int main(int argc, char* argv[])
 {
+	regex expression("");
+
+	map<string, int> mots;
+	ifstream infile("Source.cpp");
+
+	vector<string> words; 
+
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	for (string line; getline(infile, line);)
+		words.push_back(line);
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+	auto duration = duration_cast<microseconds>(t2 - t1).count();
+	cout << "Créer le vecteur: " << duration << endl;
+
+	infile.close();
+
 	vector<string> keywords = vector<string>{	"alignas", "alignof", "and", "and_eq", "asm", "auto",
 		"bitand", "bitor", "bool", "break", "case", "catch",
 		"char", "char16_t", "char32_t", "class", "compl",
@@ -27,77 +46,45 @@ void AddSpanToKeywords(vector<string>& words)
 		"true", "try", "typedef", "typeid", "typename", "union",
 		"unsigned", "using", "virtual", "void", "volatile",
 		"wchar_t", "while", "xor", "xor_eq"};
-	
-	for (int i = 0; i < words.size(); ++i)
-	{
-		bool trouve = false;
-		for (int j = 0; j < keywords.size(); j++)
-		{
-			int pos = words[i].find(keywords.at(j));
-			if (pos != -1 && !trouve)
-			{
-				trouve = true;
-				words[i].replace(pos, keywords[j].length(), "<span style='color:blue'>" + words[i].substr(pos,keywords[j].length()) + "</span>");
-			}
-		}
-	}
-}
-
-void RemplacerTout(string &content)
-{
-	map<char, string> symbols;
-	symbols['<'] = " &lt ";
-	symbols['>'] = " &gt ";
-	symbols['&'] = " &amp ";
-	symbols['\n'] = " </br> ";
-	symbols['\t'] = " &nbsp&nbsp&nbsp&nbsp ";
-	for (auto i = begin(content); i != end(content); ++i)
-	{
-		if (symbols.find(*i) != end(symbols))
-		{
-			content = content.substr(i, 0);
-		}
-	}
-}
-
-
-int main(int argc, char* argv[])
-{
-	string content;
-	string pattern("^[a-zA-Z]([a-zA-Z0-9_])*[\\D]");
-	regex expression(pattern);
-	map<string, int> mots;
-	ifstream infile("Source.cpp");
-	while (!infile.eof())
-		content += infile.get();
-
-	RemplacerTout(content);
-
-	istringstream iss(content);
-
-	vector<string> words;
-	copy(istream_iterator<string>(iss),
-		istream_iterator<string>(),
-		back_inserter(words));
-
-	AddSpanToKeywords(words);
 
 	ofstream outfile("Source.cpp.html");
-	for (auto itt = begin(words); itt != end(words); ++itt)
-		outfile << *itt << ' ';
-	outfile.close();
 
-	infile.close();
-	infile.open("Source.cpp.html");
+	t1 = high_resolution_clock::now();
+	for (auto debut = begin(words); debut != end(words); ++debut)
+	{
+		*debut = regex_replace(*debut, regex{ "&" }, "&amp;");
+		*debut = regex_replace(*debut, regex{ "<" }, "&lt;");
+		*debut = regex_replace(*debut, regex{ ">" }, "&gt;");
+
+		for (auto keywordPos = begin(keywords); keywordPos != end(keywords); ++keywordPos)
+		{
+			expression = "\\b" + *keywordPos + "\\b";
+
+			*debut = regex_replace(*debut, expression, "<span style='color:blue'>" + *keywordPos + "</span>");
+		}
+		outfile << *debut << "<br>" << flush;
+	}
+
+	t2 = high_resolution_clock::now();
+
+	duration = duration_cast<microseconds>(t2 - t1).count();
+	cout << "Colorer: " << duration << endl;
+
+	expression = "\\b[a-zA-Z_]([a-zA-Z_])*\\b";
+
+	t1 = high_resolution_clock::now();
 	for (string s; infile >> s;)
 	{
 		if (regex_match(s, expression))
 			mots[s]++;
 	}
+	t2 = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(t2 - t1).count();
+	cout << "Stats: " << duration << endl;
 	infile.close();
 	ofstream stats("Stats.txt");
 	for (auto s = mots.begin(); s != mots.end(); s++)
 		stats << s->first << " : " << s->second << endl;
 	stats.close();
-	
+	outfile.close();
 }
