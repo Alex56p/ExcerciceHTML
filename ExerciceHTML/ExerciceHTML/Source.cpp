@@ -10,25 +10,80 @@
 using namespace std;
 using namespace std::chrono;
 
+vector<string> ReadFile(string filename);
+void setArguments(int argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options);
+void Write(vector<string> words, string filename);
+void Replace(vector<string> &words, bool color);
+void addWords(vector<string> &allWords, vector<string> words);
+void SetStats(vector<string> words);
+
 int main(int argc, char* argv[])
 {
-	regex expression("");
+	vector<string> Files;
+	vector<string> Options;
+	vector<string> allWords;
+	setArguments(argc, argv, Files, Options);
 
-	map<string, int> mots;
-	ifstream infile("Source.cpp");
+	bool color = false;
+	bool stats = false;
+	for (int i = 0; i < Options.size(); ++i)
+	{
+		if (Options.at(i) == "couleur")
+			color = true;
+		else if (Options.at(i) == "stats")
+			stats = true;
+	}
 
-	vector<string> words; 
+	if (Files.size() <= 0)
+		Files.push_back("Source.cpp");
 
-	high_resolution_clock::time_point t1 = high_resolution_clock::now();
-	for (string line; getline(infile, line);)
-		words.push_back(line);
-	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	for (int i = 0; i < Files.size(); ++i)
+	{
+		vector<string> words = ReadFile(Files.at(i));
+		Replace(words, color);
+		Write(words, Files.at(i));
+		addWords(allWords, words);
+	}
+	
+	if (stats)
+		SetStats(allWords);
+}
 
-	auto duration = duration_cast<microseconds>(t2 - t1).count();
-	cout << "Créer le vecteur: " << duration << endl;
+void setArguments(int argc,char* argv[], vector<string> &SourceFiles, vector<string> &Options)
+{
+	for (int i = 0; i < argc; ++i)
+	{
+		string param = argv[i];
+		if (param[0] == '-' || param[0] == '/')
+			Options.push_back(param.substr(1));
+		else if (param.find(".cpp") != std::string::npos)
+			SourceFiles.push_back(param);
+	}
+}
 
-	infile.close();
+vector<string> ReadFile(string filename)
+{
+	vector<string> sentences;
+	ifstream file(filename);
+	if (file.is_open())
+	{
+		for (string line; getline(file, line);)
+			sentences.push_back(line);
+	}
+	file.close();
+	return sentences;
+}
 
+void Write(vector<string> words, string filename)
+{
+	ofstream file(filename + ".html");
+	for (int i = 0; i < words.size(); ++i)
+		file << words.at(i) << "<br>" << flush;
+	file.close();
+}
+
+void Replace(vector<string> &words, bool color)
+{
 	vector<string> keywords = vector<string>{	"alignas", "alignof", "and", "and_eq", "asm", "auto",
 		"bitand", "bitor", "bool", "break", "case", "catch",
 		"char", "char16_t", "char32_t", "class", "compl",
@@ -46,45 +101,54 @@ int main(int argc, char* argv[])
 		"true", "try", "typedef", "typeid", "typename", "union",
 		"unsigned", "using", "virtual", "void", "volatile",
 		"wchar_t", "while", "xor", "xor_eq"};
-
-	ofstream outfile("Source.cpp.html");
-
-	t1 = high_resolution_clock::now();
-	for (auto debut = begin(words); debut != end(words); ++debut)
+	
+	regex expression("");
+	for(auto debut = begin(words); debut != end(words); ++debut)
 	{
 		*debut = regex_replace(*debut, regex{ "&" }, "&amp;");
 		*debut = regex_replace(*debut, regex{ "<" }, "&lt;");
 		*debut = regex_replace(*debut, regex{ ">" }, "&gt;");
-
-		for (auto keywordPos = begin(keywords); keywordPos != end(keywords); ++keywordPos)
+		*debut = regex_replace(*debut, regex{ "\\t" }, "&nbsp&nbsp&nbsp&nbsp;");
+		if (color)
 		{
-			expression = "\\b" + *keywordPos + "\\b";
-
-			*debut = regex_replace(*debut, expression, "<span style='color:blue'>" + *keywordPos + "</span>");
+			for (auto keywordPos = begin(keywords); keywordPos != end(keywords); ++keywordPos)
+			{
+				expression = "\\b" + *keywordPos + "\\b";
+				*debut = regex_replace(*debut, expression, " <span style='color:blue'> " + *keywordPos + "</span>");
+			}
 		}
-		outfile << *debut << "<br>" << flush;
 	}
 
-	t2 = high_resolution_clock::now();
+}
 
-	duration = duration_cast<microseconds>(t2 - t1).count();
-	cout << "Colorer: " << duration << endl;
+void addWords(vector<string> &allWords, vector<string> words)
+{
+	for (int i = 0; i < words.size(); ++i)
+		allWords.push_back(words.at(i));
+}
 
-	expression = "\\b[a-zA-Z_]([a-zA-Z_])*\\b";
+void SetStats(vector<string> words)
+{
+	regex expression("[a-zA-Z_]([a-zA-Z0-9_])*");
+	map<string, int> mots;
+	string file = "";
+	for (auto s = words.begin(); s != words.end(); ++s)
+		file += *s;
 
-	t1 = high_resolution_clock::now();
-	for (string s; infile >> s;)
+	istringstream iss(file);
+	vector<string> tokens;
+	copy(istream_iterator<string>(iss),
+		istream_iterator<string>(),
+		back_inserter(tokens));
+
+	for (int i = 0; i < tokens.size(); ++i)
 	{
-		if (regex_match(s, expression))
-			mots[s]++;
+		if (regex_match(tokens.at(i), expression))
+			mots[tokens.at(i)]++;
 	}
-	t2 = high_resolution_clock::now();
-	duration = duration_cast<microseconds>(t2 - t1).count();
-	cout << "Stats: " << duration << endl;
-	infile.close();
+
 	ofstream stats("Stats.txt");
 	for (auto s = mots.begin(); s != mots.end(); s++)
 		stats << s->first << " : " << s->second << endl;
 	stats.close();
-	outfile.close();
 }
