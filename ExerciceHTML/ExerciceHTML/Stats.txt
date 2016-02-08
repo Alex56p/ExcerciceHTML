@@ -1,11 +1,168 @@
-color : 1
-debut : 2
-file : 1
-i : 12
-keywordPos : 2
-keywords : 1
-param : 1
-s : 4
-stats : 1
-string : 2
-words : 1
+ : 16
+ != end(key : 1
+ + "&lt;/span&gt;"); : 1
+ + "\\b"; : 1
+ <span style='color:blue'> int</span> main( <span style='color:blue'> int</span> argc,  <span style='color:blue'> char</span>* argv[]) : 1
+ <span style='color:blue'> using</span>  <span style='color:blue'> namespace</span> std::chrono; : 1
+ <span style='color:blue'> using</span>  <span style='color:blue'> namespace</span> std; : 1
+ <span style='color:blue'> void</span> Replace(vector&lt;string&gt; &amp; : 2
+ <span style='color:blue'> void</span> SetStats(vector&lt;string&gt;  : 2
+ <span style='color:blue'> void</span> Write(vector&lt;string&gt;  : 2
+ <span style='color:blue'> void</span> addWords(vector&lt;string&gt; &amp;allWords, vector&lt;string&gt;  : 2
+ <span style='color:blue'> void</span> setArguments( <span style='color:blue'> int</span> argc,  <span style='color:blue'> char</span>* argv[], vector&lt;string&gt; &amp;SourceFiles, vector&lt;string&gt; &amp;Options); : 1
+ <span style='color:blue'> void</span> setArguments( <span style='color:blue'> int</span> argc, <span style='color:blue'> char</span>* argv[], vector&lt;string&gt; &amp;SourceFiles, vector&lt;string&gt; &amp;Options) : 1
+ = ReadFile(Files.at(i)); : 1
+ = begin(key : 1
+ = vector&lt;string&gt;{&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> alignas</span>", " <span style='color:blue'> alignof</span>", " <span style='color:blue'> and</span>", " <span style='color:blue'> and_eq</span>", " <span style='color:blue'> asm</span>", " <span style='color:blue'> auto</span>", : 1
+#include &lt;algorithm&gt; : 1
+#include &lt;chrono&gt; : 1
+#include &lt;fstream&gt; : 1
+#include &lt;iostream&gt; : 1
+#include &lt;map&gt; : 1
+#include &lt;regex&gt; : 1
+#include &lt;sstream&gt; : 1
+#include &lt;string&gt; : 1
+#include &lt;vector&gt; : 1
+&nbsp&nbsp&nbsp&nbsp; : 2
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'>  : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> bool</span> color =  <span style='color:blue'> false</span>; : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> bool</span> stats =  <span style='color:blue'> false</span>; : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> auto</span> s = map.begin(); s != map.end(); s++) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> int</span> i = 0; i &lt;  : 3
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> int</span> i = 0; i &lt; Files.size(); ++i) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> int</span> i = 0; i &lt; Options.size(); ++i) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> int</span> i = 0; i &lt; argc; ++i) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> int</span> i = 0; i &lt; mots.size(); ++i) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span>( <span style='color:blue'> auto</span> debut = begin( : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (Files.size() &lt;= 0) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (file.is_open()) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (stats) : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> return</span> elems; : 1
+&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> return</span> sentences; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> else</span>  <span style='color:blue'> if</span> (Options.at(i) == "stats") : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> else</span>  <span style='color:blue'> if</span> (param.find(".cpp") != std::string::npos) : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> (; iter != end; ++iter) : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> (string line; getline(file, line);) : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (Options.at(i) == "couleur") : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (color) : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (item.length() &gt; 0) { : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> if</span> (param[0] == '-' || param[0] == '/') : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'>  : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> bitand</span>", " <span style='color:blue'> bitor</span>", " <span style='color:blue'> bool</span>", " <span style='color:blue'> break</span>", " <span style='color:blue'> case</span>", " <span style='color:blue'> catch</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> char</span>", " <span style='color:blue'> char16_t</span>", " <span style='color:blue'> char32_t</span>", " <span style='color:blue'> class</span>", " <span style='color:blue'> compl</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> concept</span>", " <span style='color:blue'> const</span>", " <span style='color:blue'> constexpr</span>", " <span style='color:blue'> const_cast</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> continue</span>", " <span style='color:blue'> decltype</span>", " <span style='color:blue'> default</span>", " <span style='color:blue'> delete</span>", " <span style='color:blue'> do</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> double</span>", " <span style='color:blue'> dynamic_cast</span>", " <span style='color:blue'> else</span>", " <span style='color:blue'> enum</span>", " <span style='color:blue'> explicit</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> export</span>", " <span style='color:blue'> extern</span>", " <span style='color:blue'> false</span>", " <span style='color:blue'> float</span>", " <span style='color:blue'> for</span>", " <span style='color:blue'> friend</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> goto</span>", " <span style='color:blue'> if</span>", " <span style='color:blue'> inline</span>", " <span style='color:blue'> int</span>", " <span style='color:blue'> long</span>", " <span style='color:blue'> mutable</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> namespace</span>", " <span style='color:blue'> ne : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> nullptr</span>", " <span style='color:blue'> operator</span>", " <span style='color:blue'> or</span>", " <span style='color:blue'> or_eq</span>", " <span style='color:blue'> private</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> protected</span>", " <span style='color:blue'> public</span>", " <span style='color:blue'> register</span>", " <span style='color:blue'> reinterpret_cast</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> requires</span>", " <span style='color:blue'> return</span>", " <span style='color:blue'> short</span>", " <span style='color:blue'> signed</span>", " <span style='color:blue'> sizeof</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> s : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> static</span>", " <span style='color:blue'> static_assert</span>", " <span style='color:blue'> static_cast</span>", " <span style='color:blue'> struct</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> true</span>", " <span style='color:blue'> try</span>", " <span style='color:blue'> typedef</span>", " <span style='color:blue'> typeid</span>", " <span style='color:blue'> typename</span>", " <span style='color:blue'> union</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;" <span style='color:blue'> unsigned</span>", " <span style='color:blue'> using</span>", " <span style='color:blue'> virtual</span>", " <span style='color:blue'> void</span>", " <span style='color:blue'> volatile</span>", : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp; <span style='color:blue'> for</span> ( <span style='color:blue'> auto</span> key : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;*debut = regex_replace(*debut, expression, " &lt;span style='color:blue'&gt; " + *key : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;expression = "\\b" + *key : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;-1); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;Options.push_back(param.substr(1)); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;SourceFiles.push_back(param); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;color =  <span style='color:blue'> true</span>; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;elems.push_back(item); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;expression, : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;mots.push_back(*iter); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;sentences.push_back(line); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;stats =  <span style='color:blue'> true</span>; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;{ : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;} : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;*debut = regex_replace(*debut, regex{ "&amp;" }, "&amp;amp;"); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;*debut = regex_replace(*debut, regex{ "&gt;" }, "&amp;gt;"); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;*debut = regex_replace(*debut, regex{ "&lt;" }, "&amp;lt;"); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;*debut = regex_replace(*debut, regex{ "\\t" }, "&amp;nbsp&amp;nbsp&amp;nbsp&amp;nbsp;"); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;Files.push_back("Source.cpp"); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;Replace( : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;SetStats(allWords); : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;Write( : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;addWords(allWords,  : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;allWords.push_back( : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;file &lt;&lt;  : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;map[mots.at(i)]++; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;sregex_token_iterator iter( : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;stats &lt;&lt; s-&gt;first &lt;&lt; " : " &lt;&lt; s-&gt;second &lt;&lt; endl; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;std::sregex_token_iterator end; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;string param = argv[i]; : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt;  : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;{ : 1
+&nbsp&nbsp&nbsp&nbsp;&nbsp&nbsp&nbsp&nbsp;} : 2
+&nbsp&nbsp&nbsp&nbsp;file.close(); : 2
+&nbsp&nbsp&nbsp&nbsp;ifstream file(filename); : 1
+&nbsp&nbsp&nbsp&nbsp;map&lt;string,  <span style='color:blue'> int</span>&gt; map; : 1
+&nbsp&nbsp&nbsp&nbsp;ofstream file(filename + ".html"); : 1
+&nbsp&nbsp&nbsp&nbsp;ofstream stats("Stats.txt"); : 1
+&nbsp&nbsp&nbsp&nbsp;regex expression(""); : 1
+&nbsp&nbsp&nbsp&nbsp;regex expression("(\ : 1
+&nbsp&nbsp&nbsp&nbsp;setArguments(argc, argv, Files, Options); : 1
+&nbsp&nbsp&nbsp&nbsp;stats.close(); : 1
+&nbsp&nbsp&nbsp&nbsp;std::string item; : 1
+&nbsp&nbsp&nbsp&nbsp;std::stringstream ss(s); : 1
+&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt; Files; : 1
+&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt; Options; : 1
+&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt; allWords; : 1
+&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt; key : 1
+&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt; mots; : 1
+&nbsp&nbsp&nbsp&nbsp;vector&lt;string&gt; sentences; : 1
+&nbsp&nbsp&nbsp&nbsp;{ : 6
+&nbsp&nbsp&nbsp&nbsp;} : 7
+) : 3
+); : 3
+); ++debut) : 1
+); ++key : 1
+); debut != end( : 1
+); key : 1
+,  <span style='color:blue'> bool</span> color) : 1
+,  <span style='color:blue'> bool</span> color); : 1
+, Files.at(i)); : 1
+, color); : 1
+, string filename) : 1
+, string filename); : 1
+.at(i) &lt;&lt; "&lt;br&gt;" &lt;&lt; flush; : 1
+.at(i)); : 1
+.at(i).begin(), : 1
+.at(i).end(), : 1
+.size(); ++i) : 3
+; fglk : 1
+; glajfg : 1
+; ladjfg; : 1
+; lfgjkaf : 1
+</span> (std::getline(ss, item, delim)) { : 1
+</span>", : 1
+</span>", " <span style='color:blue'> noexcept</span>", " <span style='color:blue'> not</span>", " <span style='color:blue'> not_eq</span>", : 1
+</span>", " <span style='color:blue'> template</span>", " <span style='color:blue'> this</span>", " <span style='color:blue'> thread_local</span>", " <span style='color:blue'> thro : 1
+</span>", " <span style='color:blue'> xor</span>", " <span style='color:blue'> xor_eq</span>"}; : 1
+[a-zA-Z0-9]*)+"); : 1
+_t</span>", " <span style='color:blue'>  : 1
+a; dlkgfjha : 1
+alfkjga : 1
+as : 2
+asd : 4
+da : 2
+dasd : 1
+f; gkhad : 1
+fgklhsadf : 1
+fkgha : 1
+ga : 1
+galdhfg : 1
+kgjlsadfgkjhaslkfghjsdfg : 1
+la : 1
+ladj : 1
+sd : 1
+sda : 3
+sdas : 1
+std::vector&lt;std::string&gt; &amp;split( <span style='color:blue'> const</span> std::string &amp;s,  <span style='color:blue'> char</span> delim, std::vector&lt;std::string&gt; &amp;elems) { : 1
+vector&lt;string&gt; ReadFile(string filename) : 1
+vector&lt;string&gt; ReadFile(string filename); : 1
+{ : 7
+} : 8

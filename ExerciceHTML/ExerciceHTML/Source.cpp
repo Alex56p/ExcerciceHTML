@@ -16,6 +16,16 @@ void Write(vector<string> words, string filename);
 void Replace(vector<string> &words, bool color);
 void addWords(vector<string> &allWords, vector<string> words);
 void SetStats(vector<string> words);
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+	std::stringstream ss(s);
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		if (item.length() > 0) {
+			elems.push_back(item);
+		}
+	}
+	return elems;
+}
 
 int main(int argc, char* argv[])
 {
@@ -129,26 +139,25 @@ void addWords(vector<string> &allWords, vector<string> words)
 
 void SetStats(vector<string> words)
 {
-	regex expression("[a-zA-Z_]([a-zA-Z0-9_])*");
-	map<string, int> mots;
-	string file = "";
-	for (auto s = words.begin(); s != words.end(); ++s)
-		file += *s;
-
-	istringstream iss(file);
-	vector<string> tokens;
-	copy(istream_iterator<string>(iss),
-		istream_iterator<string>(),
-		back_inserter(tokens));
-
-	for (int i = 0; i < tokens.size(); ++i)
+	regex expression("(\w[a-zA-Z0-9]*)+");
+	vector<string> mots;
+	for (int i = 0; i < words.size(); ++i)
 	{
-		if (regex_match(tokens.at(i), expression))
-			mots[tokens.at(i)]++;
+		sregex_token_iterator iter(words.at(i).begin(),
+			words.at(i).end(),
+			expression,
+			-1);
+		std::sregex_token_iterator end;
+		for (; iter != end; ++iter)
+			mots.push_back(*iter);
 	}
 
+	map<string, int> map;
+	for (int i = 0; i < mots.size(); ++i)
+		map[mots.at(i)]++;
+
 	ofstream stats("Stats.txt");
-	for (auto s = mots.begin(); s != mots.end(); s++)
+	for (auto s = map.begin(); s != map.end(); s++)
 		stats << s->first << " : " << s->second << endl;
 	stats.close();
 }
