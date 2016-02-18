@@ -1,0 +1,25 @@
+--Statistiques des données traitées pour le fichier Allo.cpp--
+
+asd : 4
+sda : 3
+as : 2
+da : 2
+a : 1
+alfkjga : 1
+dasd : 1
+dlkgfjha : 1
+f : 1
+fgklhsadf : 1
+fglk : 1
+fkgha : 1
+ga : 1
+galdhfg : 1
+gkhad : 1
+glajfg : 1
+kgjlsadfgkjhaslkfghjsdfg : 1
+la : 1
+ladj : 1
+ladjfg : 1
+lfgjkaf : 1
+sd : 1
+sdas : 1

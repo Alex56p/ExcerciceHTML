@@ -99,7 +99,7 @@ void Replace(vector<string> &words, bool color)
 		"char", "char16_t", "char32_t", "class", "compl",
 		"concept", "const", "constexpr", "const_cast",
 		"continue", "decltype", "default", "delete", "do",
-		"double", "dynamic_cast", "else", "enum", "explicit",
+		"double", "dynamic_cast", "else", "enum", "explicit",   
 		"export", "extern", "false", "float", "for", "friend",
 		"goto", "if", "inline", "int", "long", "mutable",
 		"namespace", "new", "noexcept", "not", "not_eq",
@@ -139,25 +139,22 @@ void addWords(vector<string> &allWords, vector<string> words)
 
 void SetStats(vector<string> words)
 {
-	regex expression("(\w[a-zA-Z0-9]*)+");
-	vector<string> mots;
+	regex expression("\\d+\\.?\\d*|\\w+");
+	map<string, int> stats;
+	smatch match;
 	for (int i = 0; i < words.size(); ++i)
 	{
-		sregex_token_iterator iter(words.at(i).begin(),
-			words.at(i).end(),
-			expression,
-			-1);
-		std::sregex_token_iterator end;
-		for (; iter != end; ++iter)
-			mots.push_back(*iter);
+		string sentence = words.at(i);
+		while (regex_search(sentence, match, expression))
+		{
+			for (auto& mot : match)
+				stats[mot.str()]++;
+			sentence = match.suffix().str();
+		}
 	}
 
-	map<string, int> map;
-	for (int i = 0; i < mots.size(); ++i)
-		map[mots.at(i)]++;
-
-	ofstream stats("Stats.txt");
-	for (auto s = map.begin(); s != map.end(); s++)
-		stats << s->first << " : " << s->second << endl;
-	stats.close();
+	ofstream fichier("Stats.txt");
+	for (auto s = stats.begin(); s != stats.end(); s++)
+		fichier << s->first << " : " << s->second << endl;
+	fichier.close();
 }
