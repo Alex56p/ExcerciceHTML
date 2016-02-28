@@ -1,0 +1,7 @@
+- passez vos objets (string ou autres) en paramètre de manière ref-vers-const plutôt que par copie si vous ne les modifiez pas. Dans votre code, ça a une grosse incidence sur la vitesse d'exécution car vous faites vraiment beaucoup trop de travail en créant (et en détruisant) tous ces objets temporaires inutiles
+- votre validation du «type de fichier» nous empêche d'utiliser votre programme pour des .h... Aussi, elle est incorrecte (elle traite «a.cppasketsaisgenrelol» comme un .cpp)
+- pourquoi utiliser «<br>» à l'intérieur de balises «<pre>...</pre>»?
+- NRC : la fonction Write() écrit des fichiers html incorrects
+- MOD : pourquoi Replace() ne prend-il pas ses données d'un fichier? Ça vous éviterait de recompiler à chaque ajout ou à chaque retrait de mot clé... Aussi, avez-vous remarqué que vous re-créez le gros vecteur à chaque appel de cette fonction?
+
+- NFP : dans SetStats(), vous créez la chaîne «file» à partir d'une concaténation de tous les éléments de «words», sans insérer d'espaces entre eux... Le décodage ne doit pas être terrible!
