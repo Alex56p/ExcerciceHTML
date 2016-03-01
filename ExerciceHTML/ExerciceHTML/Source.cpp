@@ -12,20 +12,10 @@ using namespace std::chrono;
 
 vector<string> ReadFile(const string& filename);
 void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options);
-void Write(vector<string> words, string filename);
-void Replace(vector<string> &words, bool color);
-void addWords(vector<string> &allWords, vector<string> words);
-void createStatsFile(vector<string> words);
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
-	std::string item;
-	while (std::getline(ss, item, delim)) {
-		if (!item.empty()) {
-			elems.push_back(item);
-		}
-	}
-	return elems;
-}
+void Write(const vector<string> &words, const string &filename);
+void Replace(vector<string> &words, const vector<string> &keywords, bool &color);
+void addWords(vector<string> &allWords, const  vector<string> & words);
+void createStatsFile(const vector<string> &words);
 
 int main(int argc, char* argv[])
 {
@@ -48,10 +38,12 @@ int main(int argc, char* argv[])
 	if (!Files.empty())
 		Files.push_back("Source.cpp");
 
+	vector<string> keywords = ReadFile("keywords.txt");
+
 	for (unsigned int i = 0; i < Files.size(); ++i)
 	{
 		vector<string> words = ReadFile(Files.at(i));
-		Replace(words, color);
+		Replace(words,keywords, color);
 		Write(words, Files.at(i));
 		addWords(allWords, words);
 	}
@@ -67,12 +59,12 @@ void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, ve
 		string param = argv[i];
 		if (param[0] == '-' || param[0] == '/')
 			Options.push_back(param.substr(1));
-		else if (param.find(".cpp") != std::string::npos)
+		else
 			SourceFiles.push_back(param);
 	}
 }
 
-vector<string> ReadFile(const string& filename)
+vector<string> ReadFile(const string& filename) 
 {
 	vector<string> sentences;
 	ifstream file(filename);
@@ -84,34 +76,17 @@ vector<string> ReadFile(const string& filename)
 	return sentences;
 }
 
-void Write(vector<string> words, string filename)
+void Write(const vector<string> &words,const string &filename)
 {
 	ofstream file(filename + ".html");
+	file << "<!DOCTYPE html>" << "<head></head><body>";
 	for (unsigned int i = 0; i < words.size(); ++i)
 		file << words.at(i) << "<br>" << flush;
+	file << "</body></html>";
 }
 
-void Replace(vector<string> &words, bool color)
+void Replace(vector<string> &words, const vector<string> &keywords, bool &color)
 {
-	vector<string> keywords = vector<string>{	"alignas", "alignof", "and", "and_eq", "asm", "auto",
-		"bitand", "bitor", "bool", "break", "case", "catch",
-		"char", "char16_t", "char32_t", "class", "compl",
-		"concept", "const", "constexpr", "const_cast",
-		"continue", "decltype", "default", "delete", "do",
-		"double", "dynamic_cast", "else", "enum", "explicit",   
-		"export", "extern", "false", "float", "for", "friend",
-		"goto", "if", "inline", "int", "long", "mutable",
-		"namespace", "new", "noexcept", "not", "not_eq",
-		"nullptr", "operator", "or", "or_eq", "private",
-		"protected", "public", "register", "reinterpret_cast",
-		"requires", "return", "short", "signed", "sizeof",
-		"static", "static_assert", "static_cast", "struct",
-		"switch", "template", "this", "thread_local", "throw",
-		"true", "try", "typedef", "typeid", "typename", "union",
-		"unsigned", "using", "virtual", "void", "volatile",
-		"wchar_t", "while", "xor", "xor_eq"};
-	
-	
 	for(auto debut = begin(words); debut != end(words); ++debut)
 	{
 		
@@ -131,12 +106,12 @@ void Replace(vector<string> &words, bool color)
 
 }
 
-void addWords(vector<string> &allWords, vector<string> words)
+void addWords(vector<string> &allWords,const  vector<string> & words)
 {
 	allWords.insert(end(allWords), begin(words), end(words));
 }
 
-void createStatsFile(vector<string> words)
+void createStatsFile(const vector<string> &words)
 {
 	regex expression("\\d+\\.?\\d*|\\w+");
 	map<string, int> stats;
