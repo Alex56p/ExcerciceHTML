@@ -7,15 +7,16 @@
 #include <algorithm>
 #include <sstream>
 #include <chrono>
+#include <thread>
 using namespace std;
 using namespace std::chrono;
 
 vector<string> ReadFile(const string& filename);
 void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options);
 void Write(const vector<string> &words, const string &filename);
-void Replace(vector<string> &words, const vector<string> &keywords, bool &color);
+void Replace(vector<string> &words, const vector<string> &keywords);
 void addWords(vector<string> &allWords, const  vector<string> & words);
-void createStatsFile(const vector<string> &words);
+void Transformation(const vector<string> &keywords, vector<string> &allWords, const vector<string> &Files);
 
 int main(int argc, char* argv[])
 {
@@ -24,32 +25,47 @@ int main(int argc, char* argv[])
 	vector<string> allWords;
 	setArguments(argc, argv, Files, Options);
 
-	bool color = false;
-	bool stats = false;
-	for (unsigned int i = 0; i < Options.size(); ++i)
-	{
-		if (Options[i] == "couleur")
-			color = true;
-		else if (Options[i] == "stats")
-			stats = true;
-	}
-
 	// s'il n'y a pas de fichier en paramètre, prendre ce fichier-ci
 	if (!Files.empty())
 		Files.push_back("Source.cpp");
 
 	vector<string> keywords = ReadFile("keywords.txt");
+	const int NTACHESMAX = thread::hardware_concurrency();
 
-	for (unsigned int i = 0; i < Files.size(); ++i)
+	for (int i = 1; i <= NTACHESMAX; ++i)
 	{
-		vector<string> words = ReadFile(Files.at(i));
-		Replace(words,keywords, color);
-		Write(words, Files.at(i));
-		addWords(allWords, words);
+		const int NTACHES = Files.size();
+		vector <function<void()>> fcts;
+		fcts.reserve(NTACHES);
+		{
+			for (int i = 0; i < NTACHES; ++i)
+			{
+				fcts.emplace_back([keywords, Files, &allWords]() {
+					for (unsigned int i = 0; i < Files.size(); ++i)
+					{
+						vector<string> words = ReadFile(Files[i]);
+						Replace(words, keywords);
+						Write(words, Files.at(i));
+						addWords(allWords, words);
+						ofstream file(Files[i] + (char)i + ".html");
+						for (auto &s : allWords)
+							file << s;
+						file.close();
+					}
+				});
+			}
+		}
+		cout << string(70, '-') << '\n' << "Test (sequentiel, async, pool...), "
+			<< NTACHES << (NTACHES == 1 ? " tache" : " taches") << endl;
+		{
+			auto avant = system_clock::now();
+			for (auto & f : fcts)
+				f();
+			auto apres = system_clock::now();
+			cout << "Execution sequentielle: "
+				<< duration_cast<milliseconds>(apres - avant).count() << " ms." << endl;
+		}
 	}
-	
-	if (stats)
-		createStatsFile(allWords);
 }
 
 void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options)
@@ -85,7 +101,7 @@ void Write(const vector<string> &words,const string &filename)
 	file << "</body></html>";
 }
 
-void Replace(vector<string> &words, const vector<string> &keywords, bool &color)
+void Replace(vector<string> &words, const vector<string> &keywords)
 {
 	for(auto debut = begin(words); debut != end(words); ++debut)
 	{
@@ -94,14 +110,11 @@ void Replace(vector<string> &words, const vector<string> &keywords, bool &color)
 		*debut = regex_replace(*debut, regex{ "<" }, "&lt;");
 		*debut = regex_replace(*debut, regex{ ">" }, "&gt;");
 		*debut = regex_replace(*debut, regex{ "\\t" }, "&nbsp&nbsp&nbsp&nbsp;");
-		if (color)
-		{
 			for (auto keywordPos = begin(keywords); keywordPos != end(keywords); ++keywordPos)
 			{
 				regex expression("\\b" + *keywordPos + "\\b");
 				*debut = regex_replace(*debut, expression, " <span style='color:blue'> " + *keywordPos + "</span>");
 			}
-		}
 	}
 
 }
@@ -111,23 +124,13 @@ void addWords(vector<string> &allWords,const  vector<string> & words)
 	allWords.insert(end(allWords), begin(words), end(words));
 }
 
-void createStatsFile(const vector<string> &words)
+void Transformation(const vector<string> &keywords, vector<string> &allWords, const vector<string> &Files)
 {
-	regex expression("\\d+\\.?\\d*|\\w+");
-	map<string, int> stats;
-	smatch match;
-	for (unsigned int i = 0; i < words.size(); ++i)
+	for (unsigned int i = 0; i < Files.size(); ++i)
 	{
-		string sentence = words[i];
-		while (regex_search(sentence, match, expression))
-		{
-			for (auto& mot : match)
-				stats[mot.str()]++;
-			sentence = match.suffix().str();
-		}
+		vector<string> words = ReadFile(Files.at(i));
+		Replace(words, keywords);
+		Write(words, Files.at(i));
+		addWords(allWords, words);
 	}
-
-	ofstream fichier("Stats.txt");
-	for (auto s = stats.begin(); s != stats.end(); s++)
-		fichier << s->first << " : " << s->second << endl;
 }
