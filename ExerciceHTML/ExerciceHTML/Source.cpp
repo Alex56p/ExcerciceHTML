@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
 
 	vector<string> keywords = ReadFile("keywords.txt");
 	const int NTACHESMAX = thread::hardware_concurrency();
+	ofstream timeFile("Time.txt", fstream::out);
 
 	for (int i = 1; i <= NTACHESMAX; ++i)
 	{
@@ -56,14 +57,16 @@ int main(int argc, char* argv[])
 			}
 		}
 		cout << string(70, '-') << '\n' << "Test (sequentiel, async, pool...), "
-			<< NTACHES << (NTACHES == 1 ? " tache" : " taches") << endl;
+			<< NTACHES << (NTACHES == 1 ? " tache" : " taches") << endl
+			<< "Etape " << i << "/" << NTACHESMAX << endl;
 		{
 			auto avant = system_clock::now();
 			for (auto & f : fcts)
 				f();
 			auto apres = system_clock::now();
-			cout << "Execution sequentielle: "
-				<< duration_cast<milliseconds>(apres - avant).count() << " ms." << endl;
+			string out = "Excecution sequentielle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+			cout << out << endl;
+			timeFile << out << endl;
 		}
 	}
 }

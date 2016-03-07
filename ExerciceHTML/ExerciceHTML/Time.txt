@@ -1,0 +1,4 @@
+Excecution sequentielle: 11346 ms.
+Excecution sequentielle: 11416 ms.
+Excecution sequentielle: 11392 ms.
+Excecution sequentielle: 11309 ms.
