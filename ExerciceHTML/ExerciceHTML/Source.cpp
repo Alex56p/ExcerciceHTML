@@ -8,6 +8,8 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
+#include <future>
+
 using namespace std;
 using namespace std::chrono;
 
@@ -30,12 +32,12 @@ int main(int argc, char* argv[])
 		Files.push_back("Source.cpp");
 
 	vector<string> keywords = ReadFile("keywords.txt");
-	const int NTACHESMAX = thread::hardware_concurrency();
+	enum { NTACHESMAX = 8 };
 	ofstream timeFile("Time.txt", fstream::out);
 
 	for (int i = 1; i <= NTACHESMAX; ++i)
 	{
-		const int NTACHES = Files.size();
+		const int NTACHES = i;
 		vector <function<void()>> fcts;
 		fcts.reserve(NTACHES);
 		{
@@ -64,11 +66,25 @@ int main(int argc, char* argv[])
 			for (auto & f : fcts)
 				f();
 			auto apres = system_clock::now();
-			string out = "Excecution sequentielle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+			string out = "Execution sequentielle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+			cout << out << endl;
+			timeFile << out << endl;
+		}
+		{
+			cout << "Test parallele" << endl;
+			vector<future<void>> v;
+			auto avant = system_clock::now();
+			for (auto & f : fcts)
+				v.emplace_back(async(f));
+			for (auto & f : v)
+				f.wait();
+			auto apres = system_clock::now();
+			string out = "Execution parallele (async) : " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
 			cout << out << endl;
 			timeFile << out << endl;
 		}
 	}
+	cin.get();
 }
 
 void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options)
