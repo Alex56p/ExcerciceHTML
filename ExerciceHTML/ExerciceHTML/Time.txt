@@ -1,16 +1,3 @@
-Excecution sequentielle: 3347 ms.
-Execution parallele (async) : 2957 ms.
-Excecution sequentielle: 6591 ms.
-Execution parallele (async) : 3210 ms.
-Excecution sequentielle: 3799 ms.
-Execution parallele (async) : 3512 ms.
-Excecution sequentielle: 5068 ms.
-Execution parallele (async) : 3404 ms.
-Excecution sequentielle: 6129 ms.
-Execution parallele (async) : 2616 ms.
-Excecution sequentielle: 7281 ms.
-Execution parallele (async) : 2828 ms.
-Excecution sequentielle: 8375 ms.
-Execution parallele (async) : 3215 ms.
-Excecution sequentielle: 23652 ms.
-Execution parallele (async) : 5134 ms.
+Chrono thread: 9382 ms.
+Séquentielle: 17039 ms.
+Parallèle: 9356 ms.

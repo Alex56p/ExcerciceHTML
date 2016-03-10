@@ -9,97 +9,99 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include "ThreadPool.h"
 
 using namespace std;
 using namespace std::chrono;
 
 vector<string> ReadFile(const string& filename);
-void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options);
+void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles);
 void Write(const vector<string> &words, const string &filename);
 void Replace(vector<string> &words, const vector<string> &keywords);
-void addWords(vector<string> &allWords, const  vector<string> & words);
-void Transformation(const vector<string> &keywords, vector<string> &allWords, const vector<string> &Files);
+void Transformation(const vector<string> &keywords, string FileName);
 
 int main(int argc, char* argv[])
 {
 	vector<string> Files;
-	vector<string> Options;
 	vector<string> allWords;
-	setArguments(argc, argv, Files, Options);
+	ofstream timeFile("Time.txt", fstream::out);
+	setArguments(argc, argv, Files);
 
 	// s'il n'y a pas de fichier en paramètre, prendre ce fichier-ci
 	if (!Files.empty())
 		Files.push_back("Source.cpp");
 
+	vector <function<void()>> fcts;
+	fcts.reserve(Files.size());
 	vector<string> keywords = ReadFile("keywords.txt");
-	enum { NTACHESMAX = 8 };
-	ofstream timeFile("Time.txt", fstream::out);
-
-	for (int i = 1; i <= NTACHESMAX; ++i)
+	ThreadPool pool;
+	string out;
+	
+	auto avant = system_clock::now();
+	for (string &s : Files)
 	{
-		const int NTACHES = i;
-		vector <function<void()>> fcts;
-		fcts.reserve(NTACHES);
+		for (int i = 0; i < 4; i++) //TEMPORAIRE0
 		{
-			for (int i = 0; i < NTACHES; ++i)
-			{
-				fcts.emplace_back([keywords, Files, &allWords]() {
-					for (unsigned int i = 0; i < Files.size(); ++i)
-					{
-						vector<string> words = ReadFile(Files[i]);
-						Replace(words, keywords);
-						Write(words, Files.at(i));
-						addWords(allWords, words);
-						ofstream file(Files[i] + (char)i + ".html");
-						for (auto &s : allWords)
-							file << s;
-						file.close();
-					}
-				});
-			}
-		}
-		cout << string(70, '-') << '\n' << "Test (sequentiel, async, pool...), "
-			<< NTACHES << (NTACHES == 1 ? " tache" : " taches") << endl
-			<< "Etape " << i << "/" << NTACHESMAX << endl;
-		{
-			auto avant = system_clock::now();
-			for (auto & f : fcts)
-				f();
-			auto apres = system_clock::now();
-			string out = "Execution sequentielle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
-			cout << out << endl;
-			timeFile << out << endl;
-		}
-		{
-			cout << "Test parallele" << endl;
-			vector<future<void>> v;
-			auto avant = system_clock::now();
-			for (auto & f : fcts)
-				v.emplace_back(async(f));
-			for (auto & f : v)
-				f.wait();
-			auto apres = system_clock::now();
-			string out = "Execution parallele (async) : " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
-			cout << out << endl;
-			timeFile << out << endl;
+			fcts.push_back([keywords, Files, &allWords]() {
+				for (unsigned int i = 0; i < Files.size(); ++i)
+				{
+					vector<string> words = ReadFile(Files[i]);
+					Replace(words, keywords);
+					Write(words, Files.at(i));
+					ofstream file(Files[i] + (char)i + ".html");
+					for (auto &s : allWords)
+						file << s;
+					file.close();
+				}
+			});
 		}
 	}
-	cin.get();
+
+	for (auto &f : fcts)
+	{
+		pool.add_task(f);
+	}
+	pool.meurs();
+	pool.wait_end();
+	auto apres = system_clock::now();
+    out = "Chrono thread: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+	cout << out << endl;
+	timeFile << out << endl;
+
+	avant = system_clock::now();
+	for (auto &f : fcts)
+	{
+		f();
+	}
+	apres = system_clock::now();
+	out = "Séquentielle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+	cout << out << endl;
+	timeFile << out << endl;
+
+	avant = system_clock::now();
+	vector<future<void>> v;
+
+	for (auto & f : fcts)
+		v.emplace_back(async(f));
+	for (auto & f : v)
+		f.wait();
+
+	apres = system_clock::now();
+	out = "Parallèle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+	cout << out << endl;
+	timeFile << out << endl;
 }
 
-void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles, vector<string> &Options)
+void setArguments(const int& argc, char* argv[], vector<string> &SourceFiles)
 {
 	for (int i = 0; i < argc; ++i)
 	{
 		string param = argv[i];
-		if (param[0] == '-' || param[0] == '/')
-			Options.push_back(param.substr(1));
-		else
-			SourceFiles.push_back(param);
+		SourceFiles.push_back(param);
 	}
 }
 
-vector<string> ReadFile(const string& filename) 
+vector<string> ReadFile(const string& filename)
 {
 	vector<string> sentences;
 	ifstream file(filename);
@@ -111,7 +113,7 @@ vector<string> ReadFile(const string& filename)
 	return sentences;
 }
 
-void Write(const vector<string> &words,const string &filename)
+void Write(const vector<string> &words, const string &filename)
 {
 	ofstream file(filename + ".html");
 	file << "<!DOCTYPE html>" << "<head></head><body>";
@@ -122,34 +124,29 @@ void Write(const vector<string> &words,const string &filename)
 
 void Replace(vector<string> &words, const vector<string> &keywords)
 {
-	for(auto debut = begin(words); debut != end(words); ++debut)
+	for (auto debut = begin(words); debut != end(words); ++debut)
 	{
-		
+
 		*debut = regex_replace(*debut, regex{ "&" }, "&amp;");
 		*debut = regex_replace(*debut, regex{ "<" }, "&lt;");
 		*debut = regex_replace(*debut, regex{ ">" }, "&gt;");
 		*debut = regex_replace(*debut, regex{ "\\t" }, "&nbsp&nbsp&nbsp&nbsp;");
-			for (auto keywordPos = begin(keywords); keywordPos != end(keywords); ++keywordPos)
-			{
-				regex expression("\\b" + *keywordPos + "\\b");
-				*debut = regex_replace(*debut, expression, " <span style='color:blue'> " + *keywordPos + "</span>");
-			}
+		for (auto keywordPos = begin(keywords); keywordPos != end(keywords); ++keywordPos)
+		{
+			regex expression("\\b" + *keywordPos + "\\b");
+			*debut = regex_replace(*debut, expression, " <span style='color:blue'> " + *keywordPos + "</span>");
+		}
 	}
 
 }
 
-void addWords(vector<string> &allWords,const  vector<string> & words)
+void Transformation(const vector<string> &keywords, string FileName)
 {
-	allWords.insert(end(allWords), begin(words), end(words));
-}
-
-void Transformation(const vector<string> &keywords, vector<string> &allWords, const vector<string> &Files)
-{
-	for (unsigned int i = 0; i < Files.size(); ++i)
-	{
-		vector<string> words = ReadFile(Files.at(i));
-		Replace(words, keywords);
-		Write(words, Files.at(i));
-		addWords(allWords, words);
-	}
+	vector<string> words = ReadFile(FileName);
+	Replace(words, keywords);
+	Write(words, FileName);
+	ofstream file(FileName + ".html");
+	for (auto &s : words)
+		file << s;
+	file.close();
 }
