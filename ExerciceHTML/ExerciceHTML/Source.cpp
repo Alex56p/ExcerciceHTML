@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 	pool.meurs();
 	pool.wait_end();
 	auto apres = system_clock::now();
-	out = "Chrono thread: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+	out = "ThreadPool: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
 	cout << out << endl;
 	timeFile << out << endl;
 
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 		f.wait();
 
 	apres = system_clock::now();
-	out = "Parallèle: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+	out = "Async: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
 	cout << out << endl;
 	timeFile << out << endl;
 }
