@@ -1,3 +1,30 @@
-Chrono thread: 9382 ms.
-Séquentielle: 17039 ms.
-Parallèle: 9356 ms.
+Chrono thread: 3311 ms.
+Séquentielle: 10104 ms.
+Parallèle: 3190 ms.
+Chrono thread: 3371 ms.
+Séquentielle: 10283 ms.
+Parallèle: 3211 ms.
+Chrono thread: 3391 ms.
+Séquentielle: 10116 ms.
+Parallèle: 3008 ms.
+
+1 fichier moyen
+Chrono thread: 2701 ms.
+Séquentielle: 7938 ms.
+Parallèle: 2509 ms.
+8 fichiers petits
+Chrono thread: 7068 ms.
+Séquentielle: 23355 ms.
+Parallèle: 7003 ms.
+Chrono thread: 0 ms.
+Séquentielle: 0 ms.
+Parallèle: 0 ms.
+Chrono thread: 93248 ms.
+Séquentielle: 304139 ms.
+Parallèle: 89380 ms.
+Chrono thread: 31829 ms.
+Séquentielle: 92839 ms.
+Parallèle: 31160 ms.
+Chrono thread: 4409 ms.
+Séquentielle: 12841 ms.
+Parallèle: 4343 ms.

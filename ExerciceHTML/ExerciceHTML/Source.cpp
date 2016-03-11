@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 {
 	vector<string> Files;
 	vector<string> allWords;
-	ofstream timeFile("Time.txt", fstream::out);
+	ofstream timeFile("Time.txt", std::ios_base::app);
 	setArguments(argc, argv, Files);
 
 	// s'il n'y a pas de fichier en paramètre, prendre ce fichier-ci
@@ -36,25 +36,22 @@ int main(int argc, char* argv[])
 	vector<string> keywords = ReadFile("keywords.txt");
 	ThreadPool pool;
 	string out;
-	
+
 	auto avant = system_clock::now();
 	for (string &s : Files)
 	{
-		for (int i = 0; i < 4; i++) //TEMPORAIRE0
-		{
-			fcts.push_back([keywords, Files, &allWords]() {
-				for (unsigned int i = 0; i < Files.size(); ++i)
-				{
-					vector<string> words = ReadFile(Files[i]);
-					Replace(words, keywords);
-					Write(words, Files.at(i));
-					ofstream file(Files[i] + (char)i + ".html");
-					for (auto &s : allWords)
-						file << s;
-					file.close();
-				}
-			});
-		}
+		fcts.push_back([keywords, Files, &allWords]() {
+			for (unsigned int i = 0; i < Files.size(); ++i)
+			{
+				vector<string> words = ReadFile(Files[i]);
+				Replace(words, keywords);
+				Write(words, Files.at(i));
+				ofstream file(Files[i] + (char)i + ".html");
+				for (auto &s : allWords)
+					file << s;
+				file.close();
+			}
+		});
 	}
 
 	for (auto &f : fcts)
@@ -64,7 +61,7 @@ int main(int argc, char* argv[])
 	pool.meurs();
 	pool.wait_end();
 	auto apres = system_clock::now();
-    out = "Chrono thread: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
+	out = "Chrono thread: " + to_string(duration_cast<milliseconds>(apres - avant).count()) + " ms.";
 	cout << out << endl;
 	timeFile << out << endl;
 
